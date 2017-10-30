@@ -7,6 +7,7 @@ from apache.airavata.model.experiment.ttypes import *
 
 import argparse
 import configparser
+import json
 
 from thrift import Thrift
 from thrift.transport import TSSLSocket
@@ -42,15 +43,27 @@ def get_user_experiments(airavataClient, authzToken, username):
     return experiments
 
     #fetch all app deployments to get moduleId and deploymentId
-def get_all_app_deployment(airavataClient, authzToken, username):
+def get_all_app_deployments(airavataClient, authzToken, username):
+    gatewayId="default"
     appDeploys = airavataClient.getAllApplicationDeployments(authzToken,gatewayId)
     return appDeploys
+
+def get_all_app_interfaces(airavataClient, authzToken, username):
+    gatewayId="default"
+    appInterfaces = airavataClient.getAllApplicationInterfaces(authzToken,gatewayId)
+    return appInterfaces    
+
+def get_all_app_modules(airavataClient, authzToken, username):
+    gatewayId="default"
+    appModules = airavataClient.getAllAppModules(authzToken,gatewayId)
+    return appModules
+
 
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(help='Arguments to launch experiment')
+    subparsers = parser.add_subparsers(help='Arguments to app data')
     parser_1 = subparsers.add_parser('getdeploys', help='Fetch all application deployments')
     parser_1.add_argument('username', type=str, help='Creator of the experiment')
     parser_1.set_defaults(parser1=True)
@@ -59,7 +72,7 @@ if __name__ == '__main__':
     print(args)
 
     config = configparser.ConfigParser()
-    config.read('airavata-client.ini')
+    config.read('airavata.ini')
     token = config['credentials']['AccessToken']
 
     username=args.username
@@ -73,5 +86,17 @@ if __name__ == '__main__':
     airavataClient = get_airavata_client(transport)
     print('Airavata client -> ' + str(airavataClient))
 
-    appDeploys = get_all_app_deployments(airavataClient,token,username)
-    
+    appDeploys = get_all_app_deployments(airavataClient,authz_token,username)
+
+    appInterfaces = get_all_app_interfaces(airavataClient, authz_token, username)
+
+    appModules = get_all_app_modules(airavataClient, authz_token, username)
+
+    with open('DeploysData.txt','w') as outfile:
+         json.dump(appDeploys,outfile,default=lambda O:O.__dict__)
+  
+    with open('InterfaceData.txt','w') as outfile2:
+         json.dump(appInterfaces,outfile2,default=lambda O:O.__dict__)
+
+    with open('ModulesData.txt','w') as outfile3:
+         json.dump(appInterfaces,outfile3,default=lambda O:O.__dict__)
