@@ -1,17 +1,15 @@
 
-
 from apache.airavata.api import Airavata
 from apache.airavata.api.ttypes import *
 
 from apache.airavata.model.workspace.ttypes import *
 from apache.airavata.model.security.ttypes import AuthzToken
 from apache.airavata.model.experiment.ttypes import *
-from apache.airavata.model.appcatalog.appdeployment.ttypes import *
+from apache.airavata.model.appcatalog.appdeployment import 
 
 import argparse
 import configparser
 import json
-import copy
 
 from thrift import Thrift
 from thrift.transport import TSocket
@@ -76,28 +74,9 @@ if __name__ == '__main__':
           AppDeployObj.parallelism = datastore[i]["parallelism"]
           #optional itens
           AppDeployObj.appDeploymentDescription = datastore[i]["appDeploymentDescription"]
-          #AppDeployObj.moduleLoadCmds = datastore[i]["moduleLoadCmds"]
-          #AppDeployObj.libPrependPaths = datastore[i]["libPrependPaths"]
-          #AppDeployObj.libAppendPaths = datastore[i]["libAppendPaths"]
-          #AppDeployObj.preJobCommands = datastore[i]["preJobCommands"]
-          #AppDeployObj.postJobCommands = datastore[i]["postJobCommands"]
-          moduleCmd = []
-          moduleCmd.append(CommandObject(datastore[i]["moduleLoadCmds"]))
-          AppDeployObj.moduleLoadCmds = copy.deepcopy(moduleCmd)
-          libprePath =[]
-          libprePath.append(SetEnvPaths(datastore[i]["libPrependPaths"]))
-          AppDeployObj.libPrependPaths = copy.deepcopy(libprePath)
-          libappPath =[] 
-          libappPath.append(SetEnvPaths(datastore[i]["libAppendPaths"])) 
-          AppDeployObj.libAppendPaths = copy.deepcopy(libappPath)
-          setEnv = []
-          setEnv.append(SetEnvPaths(datastore[i]["setEnvironment"]))
-          AppDeployObj.setEnvironment = copy.deepcopy(setEnv)
-          prejobCmd = []
-          prejobCmd.append(CommandObject(datastore[i]["preJobCommands"]))
-          AppDeployObj.preJobCommands = copy.deepcopy(prejobCmd)
-          postjobCmd = []
-          postjobCmd.append(CommandObject(datastore[i]["postJobCommands"]))
-          AppDeployObj.postJobCommands = copy.deepcopy(postjobCmd)
+          AppDeployObj.moduleLoadCmds = datastore[i]["moduleLoadCmds"]
+          AppDeployObj.libPrependPaths = datastore[i]["libPrependPaths"]
+          AppDeployObj.libAppendPaths = datastore[i]["libAppendPaths"]
+          AppDeployObj.preJobCommands = datastore[i]["preJobCommands"]
+          AppDeployObj.postJobCommands = datastore[i]["postJobCommands"]
           create_app_deployment(airavataClient, authz_token,AppDeployObj)
-
