@@ -81,9 +81,11 @@ if __name__ == '__main__':
           #AppDeployObj.libAppendPaths = datastore[i]["libAppendPaths"]
           #AppDeployObj.preJobCommands = datastore[i]["preJobCommands"]
           #AppDeployObj.postJobCommands = datastore[i]["postJobCommands"]
-          moduleCmd = []
-          moduleCmd.append(CommandObject(datastore[i]["moduleLoadCmds"]))
-          AppDeployObj.moduleLoadCmds = copy.deepcopy(moduleCmd)
+          #CommandObject(datastore[i]["moduleLoadCmds"][0]["command"]))
+          #print(moduleCmd)
+          AppDeployObj.moduleLoadCmds[0]["command"] = CommandObject(datastore[i]["moduleLoadCmds"][0]["command"])
+          AppDeployObj.moduleLoadCmds[0]["commandOrder"] = CommandObject(datastore[i]["moduleLoadCmds"][0]["commandOrder"])
+          #print(AppDeployObj.moduleLoadCmds)
           libprePath =[]
           libprePath.append(SetEnvPaths(datastore[i]["libPrependPaths"]))
           AppDeployObj.libPrependPaths = copy.deepcopy(libprePath)
