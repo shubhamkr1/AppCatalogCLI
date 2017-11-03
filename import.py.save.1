@@ -1,5 +1,6 @@
 
 
+
 from apache.airavata.api import Airavata
 from apache.airavata.api.ttypes import *
 
@@ -83,19 +84,14 @@ if __name__ == '__main__':
           #AppDeployObj.postJobCommands = datastore[i]["postJobCommands"]
           #CommandObject(datastore[i]["moduleLoadCmds"][0]["command"]))
           #print(moduleCmd)
-          list =[]
           for j in range(len(datastore[i]["moduleLoadCmds"])):
-             x = datastore[i]["moduleLoadCmds"][j]["command"]
-             y = datastore[i]["moduleLoadCmds"][j]["commandOrder"]
-             print(CommandObject(x,y))
-             list.append(CommandObject(x,y))
-             AppDeployObj.moduleLoadCmds = copy.deepcopy(list)
-
+             print( CommandObject(datastore[i]["moduleLoadCmds"][j]["commandOrder"]))
+             #AppDeployObj.moduleLoadCmds[j]["commandOrder"] = CommandObject(datastore[i]["moduleLoadCmds"][j]["commandOrder"])
           #print(AppDeployObj.moduleLoadCmds)
           libprePath =[]
           libprePath.append(SetEnvPaths(datastore[i]["libPrependPaths"]))
           AppDeployObj.libPrependPaths = copy.deepcopy(libprePath)
-          libappPath =[]
+          libappPath =[] 
           libappPath.append(SetEnvPaths(datastore[i]["libAppendPaths"])) 
           AppDeployObj.libAppendPaths = copy.deepcopy(libappPath)
           setEnv = []
