@@ -15,7 +15,7 @@ import copy
 
 from thrift import Thrift
 from thrift.transport import TSocket
-from thrift.transport import TSocket
+#from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
@@ -46,6 +46,12 @@ def create_app_deployment(airavataClient, authzToken,AppDeployObj):
     appDeployID = airavataClient.registerApplicationDeployment(authzToken,gatewayId,AppDeployObj)
     return appDeployID
 
+def get_all_projects(airavataClient, authzToken, username):
+    gatewayId="default"
+    projectLists = airavataClient.getUserProjects(authzToken, gatewayId, username, -1, 0)
+
+    return projectLists
+
 if __name__ == '__main__':
 
     config = configparser.ConfigParser()
@@ -55,18 +61,22 @@ if __name__ == '__main__':
 
     authz_token = get_authz_token(token,username)
 
-    hostname = "api.scigap.org"
+    hostname = "api.devscigap.org"
     port = "9930"
     transport = get_transport(hostname, port)
     transport.open()
     airavataClient = get_airavata_client(transport)
 
+    projects = get_all_projects(airavataClient, authz_token, username)
+    #transport.close()
+    print("project "+projects)
+
     with open('DeploysData.txt') as file:
       datastore= json.load(file)
 
     for i in range(len(datastore)):
-          print(str(i)+" element: desc :"+datastore[i]["appDeploymentDescription"])
-          print("depId "+datastore[i]["appDeploymentId"])
+          #print(str(i)+" element: desc :"+datastore[i]["appDeploymentDescription"])
+          #print("depId "+datastore[i]["appDeploymentId"])
           #creating objects one by one on gateway
           AppDeployObj = ApplicationDeploymentDescription()
           AppDeployObj.appDeploymentId = datastore[i]["appDeploymentId"]
@@ -107,5 +117,5 @@ if __name__ == '__main__':
           postjobCmd = []
           postjobCmd.append(CommandObject(datastore[i]["postJobCommands"]))
           AppDeployObj.postJobCommands = copy.deepcopy(postjobCmd)
-          create_app_deployment(airavataClient, authz_token,AppDeployObj)
+          #create_app_deployment(airavataClient, authz_token,AppDeployObj)
 
