@@ -91,12 +91,12 @@ if __name__ == '__main__':
     appInterfaces = get_all_app_interfaces(airavataClient, authz_token, username)
 
     appModules = get_all_app_modules(airavataClient, authz_token, username)
-
+    '''
     with open('DeploysData.txt','w') as outfile:
          json.dump(appDeploys,outfile,default=lambda O:O.__dict__)
   
     with open('InterfaceData.txt','w') as outfile2:
          json.dump(appInterfaces,outfile2,default=lambda O:O.__dict__)
-
+    '''
     with open('ModulesData.txt','w') as outfile3:
-         json.dump(appInterfaces,outfile3,default=lambda O:O.__dict__)
+         json.dump(appModules,outfile3,default=lambda O:O.__dict__)

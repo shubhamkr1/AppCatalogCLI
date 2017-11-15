@@ -56,10 +56,6 @@ def create_app_module(airavataClient, authzToken,AppModuleObj):
     appDeployID = airavataClient.registerApplicationModule(authzToken,gatewayId,AppModuleObj)
     return appDeployID
 
-def get_all_app_modules(airavataClient, authzToken):
-    gatewayId= "shubhamtestbed"
-    appModules = airavataClient.getAllAppModules(authzToken,gatewayId)
-    return appModules
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
@@ -80,7 +76,7 @@ if __name__ == '__main__':
     #transport.close()
     print(projects)
 
-    '''    
+    '''
     #import modules
     with open('ModulesData.txt') as file:
       datastore= json.load(file)
@@ -95,11 +91,7 @@ if __name__ == '__main__':
     
 
     print("all modules created !!")
-
-
     '''
-
-    ModulesList = get_all_app_modules(airavataClient,authz_token)
 
     print("deployment creation starts!!")
 
@@ -109,13 +101,7 @@ if __name__ == '__main__':
     for i in range(len(datastore)):
           AppDeployObj = ApplicationDeploymentDescription()
           AppDeployObj.appDeploymentId = datastore[i]["appDeploymentId"]
-          #AppDeployObj.appModuleId =  "" #datastore[i]["appModuleId"]
-          #extract name from moduleid
-          appModuleName = datastore[i]["appModuleId"].split('-')[0]
-          appModuleName = appModuleName[:-9]
-          for mod in ModulesList:
-             if(appModuleName == mod.appModuleName):
-                AppDeployObj.appModuleId = mod.appModuleId
+          AppDeployObj.appModuleId =  "" #datastore[i]["appModuleId"]
           AppDeployObj.computeHostId = datastore[i]["computeHostId"]
           AppDeployObj.executablePath = datastore[i]["executablePath"]
           AppDeployObj.parallelism = datastore[i]["parallelism"]
