@@ -40,30 +40,30 @@ def get_airavata_client(transport):
 def get_authz_token(token,username):
     return AuthzToken(accessToken=token, claimsMap={'gatewayID': "shubhamtestbed", 'userName': username})
 
-def get_all_projects(airavataClient, authzToken, username):
+def get_all_projects(airavataClient, authzToken, username,gatewayId):
 
-    gatewayId = "shubhamtestbed"
+    #gatewayId = "shubhamtestbed"
     projectLists = airavataClient.getUserProjects(authzToken, gatewayId, username, -1, 0)
 
     return projectLists
 
-def create_app_deployment(airavataClient, authzToken,AppDeployObj):
-    gatewayId=  "shubhamtestbed"
+def create_app_deployment(airavataClient, authzToken,AppDeployObj,gatewayId):
+    #gatewayId=  "shubhamtestbed"
     appDeployID = airavataClient.registerApplicationDeployment(authzToken,gatewayId,AppDeployObj)
     return appDeployID
 
-def create_app_module(airavataClient, authzToken,AppModuleObj):
-    gatewayId= "shubhamtestbed"
+def create_app_module(airavataClient, authzToken,AppModuleObj,gatewayId):
+    #gatewayId= "shubhamtestbed"
     appDeployID = airavataClient.registerApplicationModule(authzToken,gatewayId,AppModuleObj)
     return appDeployID
 
-def get_all_app_modules(airavataClient, authzToken):
-    gatewayId= "shubhamtestbed"
+def get_all_app_modules(airavataClient, authzToken,gatewayId):
+    #gatewayId= "shubhamtestbed"
     appModules = airavataClient.getAllAppModules(authzToken,gatewayId)
     return appModules
 
-def create_app_interface(airavataClient, authzToken, AppInterfaceObj):
-    gatewayId="shubhamtestbed"
+def create_app_interface(airavataClient, authzToken, AppInterfaceObj,gatewayId):
+    #gatewayId="shubhamtestbed"
     appDeployID = airavataClient.registerApplicationInterface(authzToken,gatewayId,AppInterfaceObj)
     return appDeployID
 
@@ -72,6 +72,7 @@ if __name__ == '__main__':
     config.read('airavata.ini')
     token = config['credentials']['AccessToken']
     username=config['credentials']['Username']
+    gatewayid = config['credentials']['GatewayId']
 
     authz_token = get_authz_token(token,username)
 
@@ -82,7 +83,7 @@ if __name__ == '__main__':
     airavataClient = get_airavata_client(transport)
     print('Airavata client -> ' + str(airavataClient))
 
-    projects = get_all_projects(airavataClient, authz_token, username)
+    projects = get_all_projects(airavataClient, authz_token, username,gatewayid)
     #transport.close()
     print(projects)
 
@@ -97,7 +98,7 @@ if __name__ == '__main__':
          AppModuleObj.appModuleName =  datastore[i]["appModuleName"]
          AppModuleObj.appModuleVersion = datastore[i]["appModuleVersion"]
          AppModuleObj.appModuleDescription = datastore[i]["appModuleDescription"]
-         create_app_module(airavataClient,authz_token,AppModuleObj)
+         create_app_module(airavataClient,authz_token,AppModuleObj,gatewayid)
     
 
     print("all modules created !!")
@@ -105,7 +106,7 @@ if __name__ == '__main__':
 
 
 
-    ModulesList = get_all_app_modules(airavataClient,authz_token)
+    ModulesList = get_all_app_modules(airavataClient,authz_token,gatewayid)
 
     print("deployment creation starts!!")
 
@@ -185,7 +186,7 @@ if __name__ == '__main__':
                postjobCmd.append(CommandObject(x,y))
                AppDeployObj.postJobCommands = copy.deepcopy(postjobCmd)
 
-          create_app_deployment(airavataClient, authz_token,AppDeployObj)
+          create_app_deployment(airavataClient, authz_token,AppDeployObj,gatewayid)
 
 
 
@@ -198,10 +199,7 @@ if __name__ == '__main__':
       datastore2= json.load(file)
 
     for i in range(len(datastore2)):
-          #print(str(i)+" element: desc :"+datastore2[i]["appDeploymentDescription"])
-          #print("depId "+datastore2[i]["appDeploymentId"]) 
           AppInterfaceObj = ApplicationInterfaceDescription()
-          #AppInterfaceObj.applicationInterfaceId = datastore2[i]["applicationInterfaceId "]
           AppInterfaceObj.applicationName =  datastore2[i]["applicationName"] 
           AppInterfaceObj.applicationDescription =  datastore2[i]["applicationDescription"]  
           AppInterfaceObj.applicationModules = list(datastore2[i]["applicationModules"])
@@ -242,7 +240,7 @@ if __name__ == '__main__':
                appOutputs.append(OutputDataObjectType(x,y,z,a,b,c,d,e,f,g,h))
              AppInterfaceObj.applicationOutputs = copy.deepcopy(appOutputs) 
           
-          create_app_interface(airavataClient,authz_token,AppInterfaceObj) 
+          create_app_interface(airavataClient,authz_token,AppInterfaceObj,gatewayid) 
 
     print("interface creation ends!!")
 
