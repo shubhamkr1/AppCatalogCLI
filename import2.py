@@ -62,9 +62,9 @@ def get_all_app_modules(airavataClient, authzToken):
     appModules = airavataClient.getAllAppModules(authzToken,gatewayId)
     return appModules
 
-def create_app_interface(airavataClient, authzToken):
+def create_app_interface(airavataClient, authzToken, AppInterfaceObj):
     gatewayId="shubhamtestbed"
-    appDeployID = airavataClient.registerApplicationInterface(authzToken,gatewayId)
+    appDeployID = airavataClient.registerApplicationInterface(authzToken,gatewayId,AppInterfaceObj)
     return appDeployID
 
 if __name__ == '__main__':
@@ -211,8 +211,7 @@ if __name__ == '__main__':
              for j in range(len(datastore2[i]["applicationInputs"])): 
                x = datastore2[i]["applicationInputs"][j]["name"]
                y = datastore2[i]["applicationInputs"][j]["value"]
-               Z = DataType()
-               z = Z.findByValue(datastore2[i]["applicationInputs"][j]["type"])
+               z = datastore2[i]["applicationInputs"][j]["type"]
                a = datastore2[i]["applicationInputs"][j]["applicationArgument"]
                b = datastore2[i]["applicationInputs"][j]["standardInput"]
                c = datastore2[i]["applicationInputs"][j]["userFriendlyDescription"]
@@ -221,8 +220,8 @@ if __name__ == '__main__':
                f = datastore2[i]["applicationInputs"][j]["isRequired"]
                g = datastore2[i]["applicationInputs"][j]["requiredToAddedToCommandLine"]
                h = datastore2[i]["applicationInputs"][j]["dataStaged"]
-               i = datastore2[i]["applicationInputs"][j]["storageResourceId"]
-               appInputs.append(InputDataObjectType(x,y,z,a,b,c,d,e,f,g,h,i))
+               k = datastore2[i]["applicationInputs"][j]["storageResourceId"]
+               appInputs.append(InputDataObjectType(x,y,z,a,b,c,d,e,f,g,h,k))
              AppInterfaceObj.applicationInputs = copy.deepcopy(appInputs)  
           
           if datastore2[i]["applicationOutputs"] is not None:
@@ -230,8 +229,8 @@ if __name__ == '__main__':
              for j in range(len(datastore2[i]["applicationOutputs"])): 
                x = datastore2[i]["applicationOutputs"][j]["name"]
                y = datastore2[i]["applicationOutputs"][j]["value"]
-               Z = DataType()
-               z = Z.findByValue(datastore2[i]["applicationOutputs"][j]["type"])
+               
+               z = datastore2[i]["applicationOutputs"][j]["type"]
                a = datastore2[i]["applicationOutputs"][j]["applicationArgument"]
                b = datastore2[i]["applicationOutputs"][j]["isRequired"]
                c = datastore2[i]["applicationOutputs"][j]["requiredToAddedToCommandLine"]
@@ -240,7 +239,7 @@ if __name__ == '__main__':
                f = datastore2[i]["applicationOutputs"][j]["searchQuery"]
                g = datastore2[i]["applicationOutputs"][j]["outputStreaming"]
                h = datastore2[i]["applicationOutputs"][j]["storageResourceId"]
-               app.appOutputs.append(OutputDataObjectType(x,y,z,a,b,c,d,e,f,g,h))
+               appOutputs.append(OutputDataObjectType(x,y,z,a,b,c,d,e,f,g,h))
              AppInterfaceObj.applicationOutputs = copy.deepcopy(appOutputs) 
           
           create_app_interface(airavataClient,authz_token,AppInterfaceObj) 
